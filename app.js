@@ -36,7 +36,6 @@ app.post('/ad', async(req, res) => {
 
     // Navigate to home page
     await page.goto('https://www.seminuevos.com/');
-    await page.waitForNavigation({waitUntil: 'load'});
     console.log('Currently on home page');
 
     // Navigate to login page
@@ -152,23 +151,25 @@ app.post('/ad', async(req, res) => {
     console.log('Currently on second ad publish wizard page');
 
     await page.waitFor(3000);
-
+    
     // Descripción: [INPUT DE USUARIO] - input_text_area_review
     await page.type('#input_text_area_review', description);
     console.log('Typed:    Descripcion');
     
     // Imágenes: Sube 3 fotos, las que sean.
+    await page.waitForSelector('input[type="file"]');
+    await page.waitFor(1000);
     const input = await page.$('input[type="file"]');
     await input.uploadFile('./images/car-1.jpg');
-    await page.waitFor(1000);
-    console.log('Uploaded File')
-    await input.uploadFile('./images/car-2.jpg');
-    await page.waitFor(1000);
-    console.log('Uploaded File')
-    await input.uploadFile('./images/car-3.jpg');
-    await page.waitFor(1000);
+    await page.waitFor(2000);
     console.log('Uploaded File');
-    await page.waitFor(1000);
+    await input.uploadFile('./images/car-2.jpg');
+    await page.waitFor(2000);
+    console.log('Uploaded File');
+    await input.uploadFile('./images/car-3.jpg');
+    await page.waitFor(2000);
+    console.log('Uploaded File');
+    await page.waitFor(2000);
 
     // Navigate to plan types page
     await page.waitForSelector('.next-button:not(.back)');
