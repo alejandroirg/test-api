@@ -3,6 +3,7 @@
 ## Installation
 
 ### Clone this repository
+You will need node and npm installed globally on your machine.
     git clone https://github.com/alejandroirg/test-api.git
 
 ### Install dependencies
