@@ -12,7 +12,7 @@ app.use(cors());
 
 app.post('/ad', async(req, res) => {
 
-    // Validacion
+    // Validation
     const schema = Joi.object({
       price: Joi.number().required(),
       description: Joi.string().required()
@@ -22,7 +22,6 @@ app.post('/ad', async(req, res) => {
 
     if(error) return res.status(422).send(error.details[0].message);
 
-    // User input
     const price = req.body.price;
     const description = req.body.description;
 
@@ -35,6 +34,7 @@ app.post('/ad', async(req, res) => {
 
     // Navigate to home page
     await page.goto('https://www.seminuevos.com/');
+    console.log('Currently on home page');
 
     // Navigate to login page
     await page.evaluate(() => { document.querySelector('a.login-btn').click(); });
