@@ -32,8 +32,11 @@ app.post('/ad', async(req, res) => {
     // Events
     page.on('load', () => console.log('Loaded: ' + page.url()));
 
+    await page.setDefaultNavigationTimeout(0); 
+
     // Navigate to home page
     await page.goto('https://www.seminuevos.com/');
+    await page.waitForNavigation({waitUntil: 'load'});
     console.log('Currently on home page');
 
     // Navigate to login page
@@ -45,12 +48,12 @@ app.post('/ad', async(req, res) => {
     await page.type('#email_login', process.env.SEMINUEVOS_USERNAME);
     await page.type('#password_login', process.env.SEMINUEVOS_PASSWORD);
     await page.click('button[type="submit"]');
-    await page.waitForNavigation();
+    await page.waitForNavigation({waitUntil: 'load'});
     console.log('Currently on home page, but signed in');
 
     // Navigate to ad publish wizard
     await page.evaluate(() => { document.querySelector('.cta-btn > a').click(); });
-    await page.waitForNavigation({waitUntil: 'load'});
+    await page.waitForNavigation({ waitUntil: 'networkidle2' });
     console.log('Currently on ad publish wizard page');
 
     //
@@ -145,7 +148,7 @@ app.post('/ad', async(req, res) => {
     
     // Navigate to next page
     await page.evaluate(() => { document.querySelector('.next-button').click(); });
-    await page.waitForNavigation({waitUntil: 'load'});
+    await page.waitForNavigation({waitUntil: 'networkidle0'});
     console.log('Currently on second ad publish wizard page');
 
     await page.waitFor(3000);
@@ -168,6 +171,7 @@ app.post('/ad', async(req, res) => {
     await page.waitFor(1000);
 
     // Navigate to plan types page
+    await page.waitForSelector('.next-button:not(.back)');
     await page.evaluate(() => { document.querySelector('.next-button:not(.back)').click() });
     await page.waitForNavigation({ waitUntil: 'networkidle0' });
     console.log('Currently on pricing plans page');    
